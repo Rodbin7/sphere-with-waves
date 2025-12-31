@@ -1,43 +1,28 @@
-# Astro Starter Kit: Minimal
+# Esfera con Olas Matemáticas usando Three.js
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Este proyecto no es solo estética; es una representación de la matemática aplicada al entorno visual. Utiliza funciones senoidales dinámicas para manipular la geometría de una esfera en tiempo real, creando un efecto de "oleaje" orgánico sobre una malla de puntos.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+# Stack Tecnológico
 
-## 🚀 Project Structure
+* **Framework:** Astro (Arquitectura de islas para máximo rendimiento).
 
-Inside of your Astro project, you'll see the following folders and files:
+* **3D Engine:** Three.js.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+* **Lenguaje:** TypeScript (Tipado fuerte para una lógica impecable).
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+* **Animación:** GSAP / Custom Shaders (según lo que uses).
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+# Lógica Matemática aplicada
 
-Any static assets, like images, can be placed in the `public/` directory.
+La deformación de la superficie se calcula mediante la función de onda:
 
-## 🧞 Commands
+f(p,t) = A⋅sen(k⋅dist(p,centro)−ω⋅t)
 
-All commands are run from the root of the project, from a terminal:
+Donde:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+   * A: Amplitud (fuerza de la ola).
 
-## 👀 Want to learn more?
+   * k: Frecuencia espacial.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+   * ω: Velocidad angular (tiempo).
+
