@@ -1,0 +1,111 @@
+<script>
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+
+const canvas = document.querySelector('canvas.sphere');
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x02d8e9);
+
+const geometry = new THREE.SphereGeometry(1, 128, 64); 
+const material = new THREE.MeshPhysicalMaterial({ 
+    color: 0xffCDC5, 
+    metalness:0,
+    roughness: 0.2,
+    reflectivity: 1,
+    ior: 1.5,
+    transmission: 1,
+    specularIntensity: 1,
+    thickness: 0.5,
+    clearcoat: 1,
+    transparent: true,
+    opacity: 1,
+}); 
+const sphere = new THREE.Mesh(geometry, material); 
+scene.add(sphere);
+
+const posAttr = geometry.attributes.position; 
+const basePositions = posAttr.array.slice();
+const normals = geometry.attributes.normal;
+const baseNormals = normals.array.slice();
+
+const params = {
+    amp: 0.16,
+    freqT:5.0,
+    freqS:5.0,
+}
+
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+directionalLight.position.set(2, 5, 7);
+scene.add(directionalLight);
+
+const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight
+};
+
+window.addEventListener('resize', () => {
+    
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
+
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
+camera.position.z = 3;
+scene.add(camera);
+
+const renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    antialias: true,
+});
+renderer.setSize(sizes.width, sizes.height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+
+const clock = new THREE.Clock();
+
+const tick = () => {
+    const elapsedTime = clock.getElapsedTime();
+
+    const p = posAttr.array; 
+    const n = baseNormals;
+
+    for (let i = 0; i < p.length; i += 3) {
+        const x = basePositions[i];
+        const y = basePositions[i + 1];
+        const z = basePositions[i + 2];
+
+        const phaseSpatial = params.freqS * Math.atan2(y, Math.hypot(x, z));
+        const phaseAzimuth = params.freqS * Math.atan2(z, x);
+        const phase = phaseSpatial + phaseAzimuth;
+
+        const disp = params.amp * Math.sin(elapsedTime * params.freqT + phase);
+
+        const nx = n[i], ny = n[i + 1], nz = n[i + 2];
+        p[i] = x + nx * disp;
+        p[i + 1] = y + ny * disp;
+        p[i + 2] = z + nz * disp;
+    }
+
+    posAttr.needsUpdate = true;
+    geometry.computeVertexNormals();
+
+    controls.update();
+
+    renderer.render(scene, camera);
+
+    window.requestAnimationFrame(tick);
+};
+
+tick();
+</script>

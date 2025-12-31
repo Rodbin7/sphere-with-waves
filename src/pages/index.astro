@@ -1,0 +1,30 @@
+---
+import Sphere from '../components/Sphere.astro';
+---
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			.sphere {
+				position: fixed;
+				top: 0;
+				left: 0;
+				outline: none;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas class="sphere">
+			<Sphere/>
+		</canvas>
+	</body>
+</html>
